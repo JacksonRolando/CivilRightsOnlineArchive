@@ -1,0 +1,26 @@
+{
+  "name": "civil-rights-online-archive",
+  "version": "1.0.0",
+  "description": "A place to inform people of the current Civil Rights movement",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/JacksonRolando/CivilRightsOnlineArchive.git"
+  },
+  "author": "Jackson Rolando and Sam Keyser",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JacksonRolando/CivilRightsOnlineArchive/issues"
+  },
+  "homepage": "https://github.com/JacksonRolando/CivilRightsOnlineArchive#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "mongodb": "^3.6.2",
+    "path": "^0.12.7"
+  }
+}
