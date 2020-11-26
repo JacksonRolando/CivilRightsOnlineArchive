@@ -24,15 +24,23 @@ global.dbclient = new MongoClient(dburl, { useUnifiedTopology: true})
 
 //Import javascript files
 const {getHomePage} = require('./routes/index.js')
+const {adminLoginPage, adminLoginSubmit} = require('./routes/accounts')
 
 //defines requests by url
 app.get('/', getHomePage)
 
 
+
+/*
+app.get('/adminLogin', adminLoginPage)
+app.post('/adminLogin', adminLoginSubmit)
+*/
+
+
 //Test Section
-const {adminDbSetup} = require('./routes/testSetup.js')
+const {initialDbSetup} = require('./routes/testSetup.js')
 
 //First time run on new server
-app.get('/setup', adminDbSetup)
+app.get('/setup', initialDbSetup)
 
 app.listen(PORT, () => console.log("Server running on port " + PORT))
