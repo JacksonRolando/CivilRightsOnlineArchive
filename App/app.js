@@ -3,11 +3,15 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const path = require('path')
 const MongoClient = require("mongodb").MongoClient
+const multer = require('multer')
+
+const FILE_DIR = "./public/data/uploads/"
+global.FILE_DIR = FILE_DIR
+const upload = multer({dest: FILE_DIR})
 
 const {
-    PORT = 8000,
+    PORT = 8001,
     NODE_ENV = 'development'
-
 } = process.env
 
 
@@ -25,10 +29,15 @@ global.dbclient = new MongoClient(dburl, { useUnifiedTopology: true})
 //Import javascript files
 const {getHomePage} = require('./routes/index.js')
 const {adminLoginPage, adminLoginSubmit} = require('./routes/accounts')
+const {inputFormPage, submitInputFile, chooseEventPage} = require('./routes/admin')
 
 //defines requests by url
 app.get('/', getHomePage)
 
+app.get('/inputFile', inputFormPage)
+//app.post('/inputFile', submitInputFile)
+
+app.post('/chooseEvent', upload.single("fileImport"), chooseEventPage)
 
 
 /*

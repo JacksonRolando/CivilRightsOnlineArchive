@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Input Form</h1>
+        <form method="POST" action="/chooseEvent" enctype="multipart/form-data">
+            <input type="text" name="title" id="title" placeholder="Title"><br>
+            <input type="text" name="creator" id="creator" placeholder="Author/Photographer"><br>
+            <input type="text" name="description" id="description" placeholder="Description"><br>
+            Date: 
+                <input type="text" name="month" id="month" size="2" placeholder="MM">/
+                <input type="text" name="day" id="day" size="2" placeholder="DD">/
+                <input type="text" name="year" id="year" size="4" placeholder="YYYY"><br>
+            <br><label for="fileImport">Import file: </label>
+            <input type="file" id="fileImport" name="fileImport"><br><br>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>

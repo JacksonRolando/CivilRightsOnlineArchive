@@ -43,25 +43,16 @@ module.exports = {
                         console.log("dates collection created")
                     }
                     
-                    //create pictures collection
-                    dbo.createCollection("pictures", (err, res) => {
-                        if(err) console.log(err)
+                    //create files collection
+                    dbo.createCollection("files", (err, res) => {
+                        if (err) console.log(err)
                         else {
-                            console.log("pictures collection created")
+                            console.log("files collection created")
                         }
-
-                        //create files collection
-                        dbo.createCollection("files", (err, res) => {
-                            if (err) console.log(err)
-                            else {
-                                console.log("files collection created")
-                            }
-                            
-                            //close connection to database
-                            db.close()
-
-                            res.redirect('/')
-                        })
+                        
+                        //close connection to database
+                        db.close()
+                        res.redirect('/')
                     })
                 })
             })
