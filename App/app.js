@@ -3,7 +3,6 @@ const bodyParser = require('body-parser')
 const session = require('express-session')
 const path = require('path')
 const MongoClient = require("mongodb").MongoClient
-//const ObjectId = require('mongodb').ObjectId
 const multer = require('multer')
 
 const FILE_DIR = "./public/data/uploads/"
@@ -48,6 +47,11 @@ global.dburl = "mongodb://localhost:27017/onlineArchive"
 
 
 
+//set database variables
+global.dburl = "mongodb://localhost:27017/onlineArchive"
+global.dbclient = new MongoClient(dburl, { useUnifiedTopology: true})
+
+
 //Import javascript files
 const {getHomePage} = require('./routes/index.js')
 const {adminLoginPage, adminLoginSubmit} = require('./routes/accounts')
@@ -75,5 +79,11 @@ const {initialDbSetup} = require('./routes/testSetup.js')
 app.get('/setup', initialDbSetup)
 
 
+
+//Test Section
+const {adminDbSetup} = require('./routes/testSetup.js')
+
+//First time run on new server
+app.get('/setup', adminDbSetup)
 
 app.listen(PORT, () => console.log("Server running on port " + PORT))
