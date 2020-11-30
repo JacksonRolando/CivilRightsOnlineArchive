@@ -3,13 +3,42 @@
     <body>
         <h3>Choose Event</h1>
         <form method="POST" action="/inputFile" id="eventForm">
-            <input type="hidden" name="eventType" value="existing">
+            <input type="hidden" name="eventType" id="eventType" value="existing">
 
-            <!--TODO: populate dropdown menu and make input form for new event-->
+            <select name="event" id="event" onchange="newEventMode(this.value)">
+                <!--TODO: populate dropdown menu with event IDs, make JS put form up-->
+                <option value="none">Choose an event</option>
+                <option value="newEvent">New Event</option>
+                <% for(i = 0; i < events.length; i++) {%>
+                    <option value="<%=events[i]._id%>"><%=events[i].title%></option>
+                <%}%>
+            </select><br>
 
-            <div id="goodData">
-                
-            </div>
+            <div id="newEventFields"></div><br>
+
+            <input type="submit"><br>
         </form>
+        <script>
+            function newEventMode(value) {
+                if (value == "newEvent"){
+                    document.getElementById("newEventFields").innerHTML = `
+                        <h3>New Event</h3>
+                        <input type="text" name="eventTitle" placeholder="Title"><br>
+                        <input type="text" name="eventDescription" placeholder="Description"><br>
+                        Date: 
+                            <input type="text" name="month" id="month" size="2" placeholder="MM" value="<%=month%>">/
+                            <input type="text" name="day" id="day" size="2" placeholder="DD" value="<%=day%>">/
+                            <input type="text" name="year" id="year" size="4" placeholder="YYYY" value="<%=year%>"><br>
+                        <input type="text" name="location" placeholder="Location">
+                    `;
+                    document.getElementById("eventType").value = "newEvent"
+                }
+                else {
+                    document.getElementById("newEventFields").innerHTML = "";
+                    document.getElementById("eventType").value = "existing"
+                }
+            }
+        </script>
     </body>
+    <button onclick="window.location.replace('/')">Back to home</button>
 </html>
