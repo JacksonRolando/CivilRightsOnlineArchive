@@ -3,7 +3,6 @@
 An archive and timeline for the Black Lives Matter movement of early 2020, the present, and the future.
 
 ## Instructions to get the app up and running
-Woo! Get it goin:
 
 ### Install Node.js
 Go to https://nodejs.org/en/ and download the recommended (left) installer.
@@ -17,11 +16,11 @@ To set up, go to the "New Connection" page and input the url to which 'global.db
 
 ### Set up Node.js Application
 In a terminal, navigate to the directory containing 'app.js' (should be CivilRightsOnlineArchive/App).
-run 'npm install' -> This will download the node packages required by the application
+Run 'npm install'; this will download the node packages required by the application
 
 ### Start Application
 In a terminal, navigate to the directory containing 'app.js' (should be CivilRightsOnlineArchive/App).
-run 'node app.js'
+Run 'node app.js'
 
 ### Use the app through a browser
 Open a browser and navigate to 'localhost:8001'
