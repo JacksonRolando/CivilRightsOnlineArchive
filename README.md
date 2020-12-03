@@ -56,8 +56,8 @@ You can now safely detach from the tmux session and from the over all terminal s
 
 
 #### Windows
-In a terminal, navigate to the directory containing 'app.js' (should be CivilRightsOnlineArchive/App).
-Run 'node app.js'
+In a terminal, navigate to the directory containing 'app.js' (should be CivilRightsOnlineArchive/App). Start the app.
+`node app.js`
 
 
 ### Use the app through a browser
