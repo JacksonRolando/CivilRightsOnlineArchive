@@ -44,6 +44,7 @@ Run 'npm install'; this will download the node packages required by the applicat
 ### Start Application
 #### Linux
 (Optional) Install tmux to allow the server to run as a background process. Useful for implementation on RPi over ssh
+
 `sudo apt install tmux`
 
 Initializing tmux session:
