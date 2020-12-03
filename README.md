@@ -18,8 +18,8 @@ Download:
 `sudo apt install mongodb`
 
 Start mongodb process:
-`sudo systemctl enable mongodb
-sudo systemctl start mongodb`
+`sudo systemctl enable mongodb`
+`sudo systemctl start mongodb`
 
 
 ### Windows 10
