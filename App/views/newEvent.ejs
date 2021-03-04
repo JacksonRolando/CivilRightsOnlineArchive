@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <h3>New Event</h3>
+    <form method="POST" action="/newEvent">
+        <input type="text" name="eventTitle" placeholder="Title"><br>
+        <input type="text" name="eventDescription" placeholder="Description"><br>
+        Date: 
+        <input type="text" name="month" id="month" size="2" placeholder="MM" value="<%=month%>">/
+        <input type="text" name="day" id="day" size="2" placeholder="DD" value="<%=day%>">/
+        <input type="text" name="year" id="year" size="4" placeholder="YYYY" value="<%=year%>"><br>
+        <input type="text" name="location" placeholder="Location"><br>
+        <input type="submit">
+    </form>
+    <br><button onclick="window.location.replace('/')">Back to home</button>
+</html>

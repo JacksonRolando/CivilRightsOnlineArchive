@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<form action="/testSubmit" method="POST" id="form">
+    <input type="text" name="toBeChanged">
+    <button type="submit">Submit</button>
+</form>
+
+<p><%=toBeChanged%></p>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    $(document.getElementById("form")).submit((e) => {
+        e.preventDefault();
+        return false;
+    });
+</script>

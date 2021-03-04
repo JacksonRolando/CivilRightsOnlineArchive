@@ -4,10 +4,24 @@ const session = require('express-session')
 const path = require('path')
 const MongoClient = require("mongodb").MongoClient
 const multer = require('multer')
+const fs = require('fs')
 
-const FILE_DIR = "./public/data/uploads/"
-global.FILE_DIR = FILE_DIR
-const upload = multer({dest: FILE_DIR})
+const MIDDLE_FILE_DIR = "./public/data/inProgress/"
+global.MIDDLE_FILE_DIR = MIDDLE_FILE_DIR
+
+const FINAL_FILE_DIR = "./public/data/uploads/"
+global.FINAL_FILE_DIR = FINAL_FILE_DIR
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, MIDDLE_FILE_DIR)
+    },
+    filename: (req, file, cb) => [
+        cb(null, Date.now() + path.extname(file.originalname))
+    ]
+})
+const upload = multer({storage: storage})
+const singleUpload = upload.single("file")
 
 const TWO_HOURS = 1000 * 60 * 60 * 2
 const {
@@ -44,29 +58,40 @@ app.use(session({
 
 //set database variables
 global.dburl = "mongodb://localhost:27017/onlineArchive"
-
-
-
-//set database variables
-global.dburl = "mongodb://localhost:27017/onlineArchive"
 global.dbclient = new MongoClient(dburl, { useUnifiedTopology: true})
 
 
 //Import javascript files
 const {getHomePage} = require('./routes/index.js')
 const {adminLoginPage, adminLoginSubmit} = require('./routes/accounts')
-const {inputFormPage, submitInputFile, chooseEventPage} = require('./routes/admin')
+const {inputFilePage, submitInputFile, chooseEventPage, newEventPage, 
+    submitNewEvent, fullSubmitFile} = require('./routes/admin')
 
 //defines requests by url
 app.get('/', getHomePage)
 
-app.get('/inputFile', inputFormPage)
-app.post('/inputFile', submitInputFile)
+app.get('/inputFile', inputFilePage)
+app.post('/inputFile', singleUpload, submitInputFile)
 
-app.post('/chooseEvent', upload.single("fileImport"), chooseEventPage)
+app.get('/chooseEvent', (req, res, next) => {
+    if(typeof req.session.fileInProgress != 'undefined') {
+        next()
+    } else {
+        res.redirect("/")
+    }
+}, chooseEventPage)
+app.post('/chooseEvent', fullSubmitFile)
+
+app.get('/newEvent', newEventPage)
+app.post('/newEvent', submitNewEvent)
+
 
 
 /*
+app.get('/testPage', (req, res) => {
+    res.render("test", {toBeChanged : "change this"})
+})
+
 app.get('/adminLogin', adminLoginPage)
 app.post('/adminLogin', adminLoginSubmit)
 */
@@ -76,12 +101,13 @@ app.post('/adminLogin', adminLoginSubmit)
 const {initialDbSetup} = require('./routes/testSetup.js')
 
 //First time run on new server
-app.get('/setup', initialDbSetup)
+//app.get('/setup', initialDbSetup)
 
 
 
 //Test Section
 const {adminDbSetup} = require('./routes/testSetup.js')
+const { nextTick } = require("process")
 
 //First time run on new server
 app.get('/setup', adminDbSetup)
