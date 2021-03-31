@@ -71,7 +71,6 @@ module.exports = {
         }
         module.exports.inputEvent(req, res, eventObj, (result) => {
             req.session.freshEvent = result.ops[0]
-            console.log(req.session.freshEvent)
             destination = typeof req.session.fileInProgress != null ? "/chooseEvent" : "/"
             res.redirect(destination)
         })

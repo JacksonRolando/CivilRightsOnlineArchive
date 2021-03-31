@@ -42,6 +42,7 @@ app = express()
 app.use(bodyParser.urlencoded({extended: false}))
 app.set('view engine', 'ejs')
 app.use(bodyParser.json()) //parse json data
+app.use(express.static(__dirname+'/public'))
 
 //set up session
 app.use(session({
@@ -113,3 +114,9 @@ const { nextTick } = require("process")
 app.get('/setup', adminDbSetup)
 
 app.listen(PORT, () => console.log("Server running on port " + PORT))
+
+/**
+ * TODO:
+ * Create public/data folders if they don't exist
+ * Make choosing event update when date is changed
+ */
