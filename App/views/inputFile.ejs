@@ -2,28 +2,95 @@
 <html>
     <body>
         <h1>Input File</h1>
-        <form method="POST" action="/inputFile" enctype="multipart/form-data">
-            <input type="text" name="title" id="title" placeholder="Title"><br>
+        <form action="/fullSubmitFile" method="POST" enctype="multipart/form-data">
+            <input type="text" name="title" id="title" placeholder="Title" value="<%=fileInProgress.title%>"><br>
             <label for="fileType">File Type:</label>
-            <select name="fileType" id="fileType">
+            <select name="fileType" id="fileType" value = >
                 <option value="image">Image</option>
-                <!--
-                <option value="text">Test</option>
-                <option value="video">Video</option>
-                <option value="pdf">PDF</option>
-                <option value="other">Other</option>
-                -->
             </select><br>
-            <input type="text" name="creator" id="creator" placeholder="Author/Photographer"><br>
-            <input type="text" name="description" id="description" placeholder="Description"><br>
+            <input type="text" name="creator" id="creator" placeholder="Author/Photographer" value="<%=fileInProgress.creator%>"><br>
+            <input type="text" name="description" id="description" placeholder="Description" value="<%=fileInProgress.description%>"><br>
             Date Taken: 
-                <input type="text" name="month" id="month" size="2" placeholder="MM">/
-                <input type="text" name="day" id="day" size="2" placeholder="DD">/
-                <input type="text" name="year" id="year" size="4" placeholder="YYYY"><br>
+                <input type="text" name="month" id="month" size="2" placeholder="MM" value="<%=month%>" onchange="popEvents()">/
+                <input type="text" name="day" id="day" size="2" placeholder="DD" value="<%=day%>" 
+                onchange="popEvents()">/
+                <input type="text" name="year" id="year" size="4" placeholder="YYYY" value="<%=year%>" onchange="popEvents()"><br>
+
+
+            <select name="event" id="event" onchange="checkNewEvent()">
+                <% if(fileInProgress.event != "") { %>
+                    <option value="<%=fileInProgress.event._id%>"><%=fileInProgress.event.title%></option>
+                <% } else  { %>
+                    <option value="none"> Choose an Event </option>
+                <% } %>
+                <option value="newEvent">New Event</option>
+            </select>
+            <div id="newEventButton"></div><br>
+
             <br><label for="fileImport">Import file: </label>
             <input type="file" id="fileImport" name="file"><br><br>
-            <input type="submit" value="Submit">
+            <input type="submit">
         </form>
     </body>
     <button onclick="window.location.replace('/')">Back to home</button>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        defaultEventHTML = `
+                    <option value="none"> Choose an Event </option>
+                    <option value="newEvent">New Event</option>`;
+    </script>
+    <script>
+        function popEvents() {
+            
+            document.getElementById('event').innerHTML = defaultEventHTML + `
+                    <option value="none">Loading...</option>`;
+        
+            
+            month = document.getElementById('month').value;
+            day = document.getElementById('day').value;
+            year = document.getElementById('year').value;
+
+
+            if(month != "" && day != "" && year != "") {
+                $.get('/eventsByDate', {
+                    year: year,
+                    month: month,
+                    day: day
+                }, (data, status) => {
+                    dynEvents = "";
+                    data.forEach(event => {
+                            dynEvents += '<option value="' + event._id + '">' + event.title + '</option>';
+                    });
+                    document.getElementById("event").innerHTML = defaultEventHTML + dynEvents;
+                })
+            } else {
+                document.getElementById('event').innerHTML = `
+                    <option value="none"> Choose an Event </option>
+                    <option value="newEvent">New Event</option>`;
+            }
+        }
+    </script>
+    <script>
+        function checkNewEvent() {
+            if(document.getElementById("event").value == "newEvent"){
+                document.getElementById("newEventButton").innerHTML = "<br><button onclick='saveFileInProgress()" +"'>New Event</button>";
+            } else (document.getElementById("newEventButton").innerHTML = "");
+        }
+    </script>
+    <script>
+        function saveFileInProgress() {
+            $.post('/saveFileInProgress', {
+                title : document.getElementById("title").value,
+                fileType : document.getElementById("fileType").value,
+                description : document.getElementById("description").value,
+                creator : document.getElementById("creator").value,
+                month : document.getElementById("month").value,
+                day : document.getElementById("day").value,
+                year : document.getElementById("year").value
+            }, (data, status) => {
+                window.location.replace('/newEvent');
+            });
+        }
+    </script>
 </html>
