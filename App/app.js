@@ -10,6 +10,10 @@ const fs = require('fs')
 const UPLOADS = "./public/data/uploads/"
 global.UPLOADS = UPLOADS
 
+if(!fs.existsSync(UPLOADS)) {
+    fs.mkdirSync(UPLOADS)
+}
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, UPLOADS)
