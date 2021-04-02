@@ -6,22 +6,19 @@ const MongoClient = require("mongodb").MongoClient
 const multer = require('multer')
 const fs = require('fs')
 
-const MIDDLE_FILE_DIR = "./public/data/inProgress/"
-global.MIDDLE_FILE_DIR = MIDDLE_FILE_DIR
 
-const FINAL_FILE_DIR = "./public/data/uploads/"
-global.FINAL_FILE_DIR = FINAL_FILE_DIR
+const UPLOADS = "./public/data/uploads/"
+global.UPLOADS = UPLOADS
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, MIDDLE_FILE_DIR)
+        cb(null, UPLOADS)
     },
     filename: (req, file, cb) => [
         cb(null, Date.now() + path.extname(file.originalname))
     ]
 })
 const upload = multer({storage: storage})
-const singleUpload = upload.single("file")
 
 const TWO_HOURS = 1000 * 60 * 60 * 2
 const {
@@ -65,26 +62,23 @@ global.dbclient = new MongoClient(dburl, { useUnifiedTopology: true})
 //Import javascript files
 const {getHomePage} = require('./routes/index.js')
 const {adminLoginPage, adminLoginSubmit} = require('./routes/accounts')
-const {inputFilePage, submitInputFile, chooseEventPage, newEventPage, 
+const {inputFilePage, saveFileInProgress, submitInputFile, chooseEventPage, newEventPage, 
     submitNewEvent, fullSubmitFile} = require('./routes/admin')
+const {eventsByDate} = require("./routes/functions")
 
 //defines requests by url
 app.get('/', getHomePage)
 
 app.get('/inputFile', inputFilePage)
-app.post('/inputFile', singleUpload, submitInputFile)
 
-app.get('/chooseEvent', (req, res, next) => {
-    if(typeof req.session.fileInProgress != 'undefined') {
-        next()
-    } else {
-        res.redirect("/")
-    }
-}, chooseEventPage)
-app.post('/chooseEvent', fullSubmitFile)
+app.post('/fullSubmitFile', upload.single("file"), fullSubmitFile)
 
 app.get('/newEvent', newEventPage)
 app.post('/newEvent', submitNewEvent)
+
+app.post('/saveFileInProgress', saveFileInProgress)
+
+app.get('/eventsByDate', eventsByDate)
 
 
 
