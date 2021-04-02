@@ -62,8 +62,7 @@ global.dbclient = new MongoClient(dburl, { useUnifiedTopology: true})
 //Import javascript files
 const {getHomePage} = require('./routes/index.js')
 const {adminLoginPage, adminLoginSubmit} = require('./routes/accounts')
-const {inputFilePage, saveFileInProgress, submitInputFile, chooseEventPage, newEventPage, 
-    submitNewEvent, fullSubmitFile} = require('./routes/admin')
+const {inputFilePage, saveFileInProgress, newEventPage, submitNewEvent, fullSubmitFile} = require('./routes/admin')
 const {eventsByDate} = require("./routes/functions")
 
 //defines requests by url
