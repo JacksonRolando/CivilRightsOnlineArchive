@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<style>
+    tr, td {
+        padding: 10px;
+    }
+</style>
+<html>
+    <body>
+        <table>
+            <tr>
+                <td>Name: <%=file.title%></td>
+                <td>Creator: <%=file.creator%></td>
+            </tr>
+            <tr>
+                <td>Date: <%=strDate%></td>
+                <td>Event: <%=strEvent%></td>
+            </tr>
+        </table><br>
+        &nbsp;&nbsp;&nbsp;Description: <%=file.description%>
+        <br><br>
+
+        <% if(file.fileType == "image") { %>
+            <img src="<%=fileDir + file.filename%>" width="500px">
+        <% } %>
+        <br><br>
+
+        <button onclick="window.location.replace('/viewEvent/<%=eventId%>')">Back to Event</button>
+          <button onclick="window.location.replace('/')">Home</button>
+    </body>
+</html>
