@@ -1,0 +1,6 @@
+#vim files
+.swp
+
+#project files
+node_modules
+public/data

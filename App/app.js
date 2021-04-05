@@ -1,3 +1,6 @@
+//TODO: dev constant, remove before v.1.0 release
+const ENABLE_BOOTSTRAP = true
+
 const express = require("express")
 const bodyParser = require('body-parser')
 const session = require('express-session')
@@ -6,6 +9,18 @@ const MongoClient = require("mongodb").MongoClient
 const multer = require('multer')
 const fs = require('fs')
 
+if(ENABLE_BOOTSTRAP) {
+    //magic smoke, don't let it out
+    var jsdom = require("jsdom")
+    const { JSDOM } = jsdom
+    const { window } = new JSDOM()
+    const { document } = (new JSDOM('')).window
+    global.document = document
+    var $ = jQuery = require('jquery')(window)
+}
+
+const MIDDLE_FILE_DIR = "./public/data/inProgress/"
+global.MIDDLE_FILE_DIR = MIDDLE_FILE_DIR
 
 const UPLOADS = "./public/data/uploads/"
 global.UPLOADS = UPLOADS
@@ -32,7 +47,7 @@ const {
     PORT = 8001,
     NODE_ENV = 'development',
 
-    SESS_SECRET = "This is a secret key to encrypt the session", //CHANGE THIS!!!
+    SESS_SECRET = "This is a secret key to encrypt the session", //TODO: CHANGE THIS!!!
     SESS_NAME = 'sid',
     SESS_LIFETIME = TWO_HOURS
 } = process.env
@@ -47,6 +62,13 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.set('view engine', 'ejs')
 app.use(bodyParser.json()) //parse json data
 app.use(express.static(__dirname+'/public'))
+
+//set up bootstrap
+if(ENABLE_BOOTSTRAP) {
+    app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
+    app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
+    app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
+}
 
 //set up session
 app.use(session({
