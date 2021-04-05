@@ -25,6 +25,13 @@ global.MIDDLE_FILE_DIR = MIDDLE_FILE_DIR
 const UPLOADS = "./public/data/uploads/"
 global.UPLOADS = UPLOADS
 
+if(!fs.existsSync(UPLOADS)) {
+    fs.mkdirSync(UPLOADS)
+}
+
+const viewFileDir = "/data/uploads/"
+global.VIEWFILEDIR = viewFileDir
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, UPLOADS)
@@ -82,10 +89,10 @@ global.dbclient = new MongoClient(dburl, { useUnifiedTopology: true})
 
 
 //Import javascript files
-const {getHomePage} = require('./routes/index.js')
+const {getHomePage, getViewFilePage, getViewEventPage, testViewAllEvents, viewEventsPage} = require('./routes/index.js')
 const {adminLoginPage, adminLoginSubmit} = require('./routes/accounts')
 const {inputFilePage, saveFileInProgress, newEventPage, submitNewEvent, fullSubmitFile} = require('./routes/admin')
-const {eventsByDate} = require("./routes/functions")
+const {eventsByDate, filesByEvent} = require("./routes/functions")
 
 //defines requests by url
 app.get('/', getHomePage)
@@ -100,6 +107,16 @@ app.post('/newEvent', submitNewEvent)
 app.post('/saveFileInProgress', saveFileInProgress)
 
 app.get('/eventsByDate', eventsByDate)
+
+app.get('/viewFile/:id', getViewFilePage)
+
+app.get('/viewEvent/:id', getViewEventPage)
+
+app.get('/filesByEvent', filesByEvent)
+
+app.get('/viewEvents', viewEventsPage)
+
+app.get('/testViewEvents', testViewAllEvents)
 
 
 
@@ -129,12 +146,3 @@ const { nextTick } = require("process")
 app.get('/setup', adminDbSetup)
 
 app.listen(PORT, () => console.log("Server running on port " + PORT))
-<<<<<<< HEAD
-=======
-
-/**
- * TODO:
- * Create public/data folders if they don't exist
- * Make choosing event update when date is changed
- */
->>>>>>> master

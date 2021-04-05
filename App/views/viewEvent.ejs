@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<style>
+    tr, td {
+        padding: 10px;
+    }
+</style>
+<html>
+    <body>
+        <h2><%=event.title%></h2>
+        <table>
+            <tr>
+                <td>Date: <%=strDate%></td>
+                <td>Location: <%=event.location%></td>
+            </tr>
+        </table><br>
+        &nbsp;&nbsp;&nbsp;Description: <%=event.description%>
+        <br><br>
+
+        <div id="files">Loading...</div>
+
+        <button onclick="window.location.replace('/viewEvents')">View Events</button>
+        <button onclick="window.location.replace('/')">Home</button>
+
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $.get('/filesByEvent', {
+            eventId: "<%=event._id%>"
+        }, (data, status) => {
+            fileDir = data.fileDir;
+            i = 0;
+            fileTable = "<table><tr>";
+            data.files.forEach(file => {
+                if(i % 3 == 0) {
+                    if(i != 0) {
+                        fileTable += "</tr><tr>";
+                    }
+                }
+
+                fileTable += `
+                    <td>
+                        <a href="/viewFile/` + file.strId + `">
+                            <img src="` + fileDir + file.filename + `" width="200px">
+                        </a>
+                    </td>
+                `;
+                i++;
+            });
+            fileTable += "</tr></table>";
+            document.getElementById("files").innerHTML = fileTable;
+        })
+    </script>
+
+</html>

@@ -1,5 +1,5 @@
 const { query } = require("express")
-const { MongoClient, ObjectID } = require("mongodb")
+const { MongoClient, ObjectId } = require("mongodb")
 
 module.exports = {
     parseReqDate: (req) => {
@@ -16,8 +16,7 @@ module.exports = {
             if(err) {
                 console.log(err)
                 db.close()
-            }
-            else{
+            } else {
                 dbo = db.db('onlineArchive')
                 nextStep(dbo, db);
             }
@@ -40,5 +39,43 @@ module.exports = {
                 }
             })
         })
+    },
+
+    documentsById: (collection, id, nextStep) => {
+        module.exports.connectToDB((dbo, db) => {
+            dbo.collection(collection).find({_id: ObjectId(id)}).toArray((err, result) => {
+                if(err) {
+                    console.log(err)
+                    db.close()
+                } else {
+                    db.close()
+                    nextStep(result)
+                }
+            })
+        })
+    },
+
+    filesByEvent: (req, res) => {
+        eventId = req.query.eventId.valueOf()
+        module.exports.connectToDB((dbo, db) => {
+            dbo.collection("files").find({eventID: eventId}).toArray((err, result) => {
+                if(err) {
+                    console.log(err)
+                    db.close()
+                } else {
+                    db.close()
+                    result.forEach(file => {
+                        file.strId = file._id.valueOf()
+                    })
+                    filesObj = {
+                        fileDir: global.VIEWFILEDIR,
+                        files: result
+                    }
+                    res.send(filesObj)
+                    res.end()
+                }
+            })
+        })
     }
+    
 }
