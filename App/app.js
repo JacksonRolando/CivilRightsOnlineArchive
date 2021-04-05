@@ -19,9 +19,6 @@ if(ENABLE_BOOTSTRAP) {
     var $ = jQuery = require('jquery')(window)
 }
 
-const MIDDLE_FILE_DIR = "./public/data/inProgress/"
-global.MIDDLE_FILE_DIR = MIDDLE_FILE_DIR
-
 const UPLOADS = "./public/data/uploads/"
 global.UPLOADS = UPLOADS
 
