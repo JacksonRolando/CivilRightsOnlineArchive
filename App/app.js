@@ -19,11 +19,15 @@ if(ENABLE_BOOTSTRAP) {
     var $ = jQuery = require('jquery')(window)
 }
 
-const MIDDLE_FILE_DIR = "./public/data/inProgress/"
-global.MIDDLE_FILE_DIR = MIDDLE_FILE_DIR
-
 const UPLOADS = "./public/data/uploads/"
 global.UPLOADS = UPLOADS
+
+if(!fs.existsSync(UPLOADS)) {
+    fs.mkdirSync(UPLOADS)
+}
+
+const viewFileDir = "/data/uploads/"
+global.VIEWFILEDIR = viewFileDir
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -82,10 +86,10 @@ global.dbclient = new MongoClient(dburl, { useUnifiedTopology: true})
 
 
 //Import javascript files
-const {getHomePage} = require('./routes/index.js')
+const {getHomePage, getViewFilePage, getViewEventPage, testViewAllEvents, viewEventsPage} = require('./routes/index.js')
 const {adminLoginPage, adminLoginSubmit} = require('./routes/accounts')
 const {inputFilePage, saveFileInProgress, newEventPage, submitNewEvent, fullSubmitFile} = require('./routes/admin')
-const {eventsByDate} = require("./routes/functions")
+const {eventsByDate, filesByEvent} = require("./routes/functions")
 
 //defines requests by url
 app.get('/', getHomePage)
@@ -100,6 +104,16 @@ app.post('/newEvent', submitNewEvent)
 app.post('/saveFileInProgress', saveFileInProgress)
 
 app.get('/eventsByDate', eventsByDate)
+
+app.get('/viewFile/:id', getViewFilePage)
+
+app.get('/viewEvent/:id', getViewEventPage)
+
+app.get('/filesByEvent', filesByEvent)
+
+app.get('/viewEvents', viewEventsPage)
+
+app.get('/testViewEvents', testViewAllEvents)
 
 
 
