@@ -129,12 +129,9 @@ const { nextTick } = require("process")
 app.get('/setup', adminDbSetup)
 
 app.listen(PORT, () => console.log("Server running on port " + PORT))
-<<<<<<< HEAD
-=======
 
 /**
  * TODO:
  * Create public/data folders if they don't exist
  * Make choosing event update when date is changed
  */
->>>>>>> master
