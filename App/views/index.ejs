@@ -7,10 +7,13 @@
         }
     </style>
     <br><br>
-    <h1>Hello!</h1>
-    
+    <h1>Hello<%=name%>!</h1>
     <button onclick="window.location.replace('/viewEvents')">View inputted files</button><br>
-    <button onclick="window.location.replace('/inputFile')">File Input form</button><br>
-    <button onclick="window.location.replace('/newEvent')">Event Input form</button>
-
+    <% if(isAdmin) { %>
+        <button onclick="window.location.replace('/inputFile')">File Input form</button><br>
+        <button onclick="window.location.replace('/newEvent')">Event Input form</button><br><br>
+        <button onclick="window.location.replace('/logout')">Logout</button>
+    <% } else { %>
+        <button onclick="window.location.replace('/login')">Login</button>
+    <% } %>
 </html>

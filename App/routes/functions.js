@@ -1,5 +1,5 @@
-const { query } = require("express")
 const { MongoClient, ObjectId } = require("mongodb")
+const fs = require('fs')
 
 module.exports = {
     parseReqDate: (req) => {
@@ -76,6 +76,19 @@ module.exports = {
                 }
             })
         })
+    },
+
+    checkEvent: (req, res, next) => {
+        if(req.body.event != 'newEvent') {
+            next()
+        } else {
+            try {
+                fs.unlinkSync(global.UPLOADS + req.file.filename)
+            } catch(err) {
+                console.log(err);
+            }
+            res.send("Nothing Happened")
+        }
     }
     
 }

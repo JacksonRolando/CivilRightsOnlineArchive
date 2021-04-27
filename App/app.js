@@ -2,12 +2,14 @@
 const ENABLE_BOOTSTRAP = true
 
 const express = require("express")
-const bodyParser = require('body-parser')
 const session = require('express-session')
 const path = require('path')
 const MongoClient = require("mongodb").MongoClient
 const multer = require('multer')
 const fs = require('fs')
+const bcrypt = require('bcrypt')
+
+global.saltRounds = 10
 
 if(ENABLE_BOOTSTRAP) {
     //magic smoke, don't let it out
@@ -47,7 +49,8 @@ const {
     PORT = 8001,
     NODE_ENV = 'development',
 
-    SESS_SECRET = "This is a secret key to encrypt the session", //TODO: CHANGE THIS!!!
+    SESS_SECRET = "This is a secret key to encrypt the session", //TODO: change this and move to hidden .env file
+                                                                //       NOT publicly in version control
     SESS_NAME = 'sid',
     SESS_LIFETIME = TWO_HOURS
 } = process.env
@@ -58,9 +61,9 @@ const IN_PROD = NODE_ENV === 'production'
 
 //set up app
 app = express()
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(express.urlencoded({extended: false}))
 app.set('view engine', 'ejs')
-app.use(bodyParser.json()) //parse json data
+app.use(express.json()) //parse json data
 app.use(express.static(__dirname+'/public'))
 
 //set up bootstrap
@@ -89,34 +92,42 @@ global.dbclient = new MongoClient(dburl, { useUnifiedTopology: true})
 
 
 //Import javascript files
-const {getHomePage, getViewFilePage, getViewEventPage, testViewAllEvents, viewEventsPage} = require('./routes/index.js')
-const {adminLoginPage, adminLoginSubmit} = require('./routes/accounts')
-const {inputFilePage, saveFileInProgress, newEventPage, submitNewEvent, fullSubmitFile} = require('./routes/admin')
-const {eventsByDate, filesByEvent} = require("./routes/functions")
+const {getHomePage, getViewFilePage, getViewEventPage, testViewAllEvents, viewEventsPage, loginPage} = require('./routes/index.js')
+const {inputFilePage, saveFileInProgress, newEventPage, submitNewEvent, fullSubmitFile, deleteEvent} = require('./routes/admin')
+const {eventsByDate, filesByEvent, checkEvent} = require("./routes/functions")
+const {login, saveTestAccount, redirectFromLogin, redirectHome, logout} = require("./routes/authentication.js")
 
 //defines requests by url
 app.get('/', getHomePage)
 
-app.get('/inputFile', inputFilePage)
+app.get('/inputFile', redirectHome, inputFilePage)
 
-app.post('/fullSubmitFile', upload.single("file"), fullSubmitFile)
+app.post('/fullSubmitFile', redirectHome, upload.single("file"), checkEvent, fullSubmitFile)
 
-app.get('/newEvent', newEventPage)
-app.post('/newEvent', submitNewEvent)
+app.get('/newEvent', redirectHome, newEventPage)
+app.post('/newEvent', redirectHome, submitNewEvent)
 
-app.post('/saveFileInProgress', saveFileInProgress)
+app.post('/saveFileInProgress', redirectHome, saveFileInProgress)
 
 app.get('/eventsByDate', eventsByDate)
+app.get('/filesByEvent', filesByEvent)
 
 app.get('/viewFile/:id', getViewFilePage)
 
 app.get('/viewEvent/:id', getViewEventPage)
 
-app.get('/filesByEvent', filesByEvent)
-
 app.get('/viewEvents', viewEventsPage)
 
 app.get('/testViewEvents', testViewAllEvents)
+
+app.get('/login', redirectFromLogin, loginPage)
+app.post('/authenticate', redirectFromLogin, login)
+
+app.get('/deleteEvent/:id', redirectHome, deleteEvent)
+
+app.get('/logout', logout)
+
+app.get('/setTestUser', saveTestAccount)
 
 
 
@@ -141,6 +152,7 @@ const {initialDbSetup} = require('./routes/testSetup.js')
 //Test Section
 const {adminDbSetup} = require('./routes/testSetup.js')
 const { nextTick } = require("process")
+
 
 //First time run on new server
 app.get('/setup', adminDbSetup)
