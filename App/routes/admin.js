@@ -1,6 +1,6 @@
-const { query } = require("express")
-const { MongoClient, ObjectID } = require("mongodb")
+const { ObjectID } = require("mongodb")
 const {parseReqDate, connectToDB} = require("./functions")
+const fs = require('fs')
 
 module.exports = {
     inputFilePage: (req, res) => {
@@ -125,6 +125,36 @@ module.exports = {
             event: ""
         }
         res.send("yay")
+    },
+
+    deleteEvent: (req, res) => {
+        connectToDB((dbo, db) => {
+            dbo.collection('events').deleteOne({_id: ObjectID(req.params.id)}, (err, obj) => {
+                if(err) {
+                    console.log(err)
+                    req.session.errMessage = "Error deleting event"
+                    db.close()
+                    res.redirect('/testViewEvents')
+                } else {
+                    dbo.collection('files').find({eventID: req.params.id}).toArray((err, files) => {
+                        if(err) console.log(err);
+                        dbo.collection('files').deleteMany({eventID: req.params.id}, (err, obj) => {
+                            if(err) console.log(err);
+                            db.close()
+                            files.forEach(file => {
+                                try{
+                                    fs.unlinkSync(file.filepath)
+                                } catch (err) {
+                                    console.log(err)
+                                }
+                            })
+                            res.redirect('/testViewEvents')
+                        })
+                    })
+                    
+                }
+            })
+        })
     }
 
     /*
