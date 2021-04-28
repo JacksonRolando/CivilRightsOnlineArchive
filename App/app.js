@@ -21,9 +21,6 @@ if(ENABLE_BOOTSTRAP) {
     var $ = jQuery = require('jquery')(window)
 }
 
-const MIDDLE_FILE_DIR = "./public/data/inProgress/"
-global.MIDDLE_FILE_DIR = MIDDLE_FILE_DIR
-
 const UPLOADS = "./public/data/uploads/"
 global.UPLOADS = UPLOADS
 
@@ -158,3 +155,9 @@ const { nextTick } = require("process")
 app.get('/setup', adminDbSetup)
 
 app.listen(PORT, () => console.log("Server running on port " + PORT))
+
+/**
+ * TODO:
+ * Create public/data folders if they don't exist
+ * Make choosing event update when date is changed
+ */
