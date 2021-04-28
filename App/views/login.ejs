@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        td {
+            padding: 5px;
+        }
+    </style>
+    <body>
+        <table>
+            <tr>
+                <td>
+                    <h3>Login</h3>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="email" id="email" placeholder="Email" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="password" id="password" placeholder="Password" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button onclick="login()" id="loginButton">Login</button>
+                </td>
+            </tr>
+        </table>
+        <p id="message"></p><br>
+        <button onclick="window.location.replace('/')">Home</button>
+    </body>
+</html>
+<script>
+    email = document.getElementById("email");
+        email.addEventListener("keyup", function(event){
+            if (event.keyCode == 13) {
+                document.getElementById("loginButton").click();
+            }
+        });
+
+    password = document.getElementById("password");
+        password.addEventListener("keyup", function(event){
+            if (event.keyCode == 13) {
+                document.getElementById("loginButton").click();
+            }
+        });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function login() {
+        message = document.getElementById('message');
+        message.innerHTML = "Loading...";
+        $.post('/authenticate', {
+            email: email.value,
+            password: password.value
+        }, (data, status) => {
+            if(!data.userAuthed) {
+                message.innerHTML = data.message;
+            } else {
+                document.location.replace('/');
+            }
+        })
+    }
+</script>

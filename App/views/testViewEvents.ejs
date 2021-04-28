@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
     <h1>Events:</h1>
+    <p><%= message %></p>
     <% for(i=0; i < events.length; i++) {%>
-        <a href="/viewEvent/<%=events[i].strId%>"><%=events[i].title%></a><br><br>
+        <a href="/viewEvent/<%=events[i].strId%>"><%=events[i].title%></a><% if(admin) { %>
+            &nbsp;&nbsp;<button onclick="window.location.replace('/deleteEvent/<%=events[i].strId%>')">Delete</button>
+        <% } %>
+        <br><br>
     <% } %>
-</html>
+    <button onclick="window.location.replace('/')">Home</button>
+</html> 

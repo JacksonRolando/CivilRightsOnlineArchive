@@ -1,9 +1,20 @@
-const e = require('express')
 const {documentsById, connectToDB} = require('./functions')
 
 module.exports = {
     getHomePage: (req, res) => {
-        res.render('index')
+        username = ""
+        isAdmin = false
+        if(req.session.user){
+            isAdmin = req.session.user.admin
+            if(isAdmin) {
+                username = " " + req.session.user.name
+            }
+        }
+        res.render('index', {name: username, isAdmin: isAdmin})
+    },
+
+    loginPage: (req, res) => {
+        res.render('login')
     },
 
     getViewFilePage: (req, res) => {
@@ -72,7 +83,16 @@ module.exports = {
                     result.forEach(event => {
                         event.strId = event._id.valueOf()
                     });
-                    res.render('testViewEvents', {events : result})
+
+                    message = req.session.errMessage ? req.session.errMessage : ""
+
+                    req.session.errMessage = ""
+
+                    res.render('testViewEvents', {
+                        events : result, 
+                        admin : req.session.user ? req.session.user.admin : false,
+                        message : message
+                    }) 
                 }
 
             })
