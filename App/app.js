@@ -1,6 +1,3 @@
-//TODO: dev constant, remove before v.1.0 release
-const ENABLE_BOOTSTRAP = true
-
 const express = require("express")
 const session = require('express-session')
 const path = require('path')
@@ -10,16 +7,6 @@ const fs = require('fs')
 const bcrypt = require('bcrypt')
 
 global.saltRounds = 10
-
-if(ENABLE_BOOTSTRAP) {
-    //magic smoke, don't let it out
-    var jsdom = require("jsdom")
-    const { JSDOM } = jsdom
-    const { window } = new JSDOM()
-    const { document } = (new JSDOM('')).window
-    global.document = document
-    var $ = jQuery = require('jquery')(window)
-}
 
 const UPLOADS = "./public/data/uploads/"
 global.UPLOADS = UPLOADS
