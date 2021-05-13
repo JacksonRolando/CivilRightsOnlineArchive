@@ -7,24 +7,53 @@
         }
     </style> 
     <br><br>
+    <h1>Hello<%=name%>!</h1>
     <h1>Active Construction Zone</h1>
     <img src="/bob.png">
     <div style="text-align: center">
-        <label>Search: </label> <input type="text" placeholder="Search..."><br>
+        <label>Search: </label> <input type="text" id="searchBox" placeholder="Search...">
+        <button onclick="runSearch()" id="searchButton">Search</button><br>
+        <div id="listOfResults"></div>
     </div>
     <br>
     <div style="text-align: center">
-        <button onclick="window.location.replace('/viewEvents')">View inputted events!</button>
-        <button onclick="window.location.replace('/inputFile')">File Input form</button><br>
-        <button onclick="window.location.replace('/newEvent')">Event Input form</button>
-    </div>
-    <h1>Hello<%=name%>!</h1>
-    <button onclick="window.location.replace('/viewEvents')">View inputted files</button><br>
-    <% if(isAdmin) { %>
-        <button onclick="window.location.replace('/inputFile')">File Input form</button><br>
-        <button onclick="window.location.replace('/newEvent')">Event Input form</button><br><br>
-        <button onclick="window.location.replace('/logout')">Logout</button>
-    <% } else { %>
+        <button onclick="window.location.replace('/viewEvents')">View inputted files</button><br>
+        <% if(isAdmin) { %>
+            <button onclick="window.location.replace('/inputFile')">File Input form</button><br>
+            <button onclick="window.location.replace('/newEvent')">Event Input form</button><br><br>
+            <button onclick="window.location.replace('/logout')">Logout</button>
+        <% } else { %>
         <button onclick="window.location.replace('/login')">Login</button>
     <% } %>
+    </div>
 </html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    searchBox = document.getElementById('searchBox');
+    function runSearch() {
+        $.get('/searchEvents', {q: searchBox.value}, (data, status) => {
+            printList = "<br>";
+            if(data.length == 0) {
+                printList += "No results found."
+            }
+            for(i = 0; i < data.length; i++) {
+                d = new Date(data[i].date)
+                strDate = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear()
+                
+                printList += data[i].title + ":<br>" +
+                    data[i].location + "<br>" +
+                    strDate + "<br>" +
+                    data[i].description + "<br><br>";
+            }
+            document.getElementById("listOfResults").innerHTML = printList;
+        });
+    };
+</script>
+<script>
+    searchBox.addEventListener("keyup", function(event){
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                document.getElementById("searchButton").click();
+            }
+        });
+</script>
