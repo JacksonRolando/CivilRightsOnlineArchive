@@ -6,11 +6,15 @@
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <li><a class="active" onclick="window.location.replace('/')">Home</a></li>
+            <li><a onclick="window.location.replace('/')">Home</a></li>
             <li><a onclick="window.location.replace('/viewEvents')">Gallery</a></li>
             <li><a onclick="window.location.replace('/newEvent')">Contribute</a></li>
             <!--TODO:make the text & action of this button dynamic with login-->
-            <li><a onclick="window.location.replace('/login')">Login</a></li>
+            <% if(isAdmin) { %>
+                <li><a onclick="window.location.replace('/login')">Login</a></li>
+            <% } else { %>
+                <li><a onclick="window.location.replace('/logout')">Logout</a></li>
+            <% } %>
         </ul>
     </div>
 </nav>

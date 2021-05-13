@@ -51,11 +51,9 @@ app.use(express.json()) //parse json data
 app.use(express.static(__dirname+'/public'))
 
 //set up bootstrap
-if(ENABLE_BOOTSTRAP) {
-    app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
-    app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
-    app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
-}
+app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
+app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
+app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
 
 //set up session
 app.use(session({
@@ -100,7 +98,7 @@ app.get('/viewFile/:id', getViewFilePage)
 
 app.get('/viewEvent/:id', getViewEventPage)
 
-app.get('/viewEvents', viewEventsPage)
+app.get('/viewEvents', testViewAllEvents)
 
 app.get('/testViewEvents', testViewAllEvents)
 

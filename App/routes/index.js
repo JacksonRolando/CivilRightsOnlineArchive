@@ -56,16 +56,16 @@ module.exports = {
     getViewEventPage: (req, res) => {
         documentsById("events", req.params.id, (events) => {
             if(events.length > 0) {
-
                 d = new Date(events[0].date)
                 strDate = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear()
 
                 res.render('viewEvent', {
-                    event: events[0], 
+                    event: (events.length > 0) ? events[0] : null,
                     fileDir: global.VIEWFILEDIR,
                     strDate: strDate
                 })
             } else {
+                //TODO: we should probably have a pop up informing the user instead of quietly eating the error
                 res.redirect('/')
             }
         })
