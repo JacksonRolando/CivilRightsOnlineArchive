@@ -4,14 +4,15 @@
   "description": "A place to inform people of the current Civil Rights movement",
   "main": "app.js",
   "scripts": {
-    "start" : "nodemon app.js"
+    "dev-start": "nodemon app.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/JacksonRolando/CivilRightsOnlineArchive.git"
   },
   "author": "Jackson Rolando and Sam Keyser",
-  "license":     "ISC",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/JacksonRolando/CivilRightsOnlineArchive/issues"
   },

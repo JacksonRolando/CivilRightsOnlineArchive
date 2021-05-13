@@ -1,3 +1,5 @@
+const MongoClient = require("mongodb").MongoClient
+
 module.exports = {
     adminDbSetup : (req, res) => {
         dbclient = global.dbclient
@@ -23,6 +25,7 @@ module.exports = {
         })
         res.redirect('/')
     },
+
     initialDbSetup : (req, res) => {
         dbclient = global.dbclient
         dbclient.connect((err, db) => {
@@ -36,13 +39,7 @@ module.exports = {
                     console.log("events collection created")
                 }
 
-                //create dates collection
-                dbo.createCollection("dates", (err, res) => {
-                    if (err) console.log(err)
-                    else {
-                        console.log("dates collection created")
-                    }
-                    
+  
                     //create files collection
                     dbo.createCollection("files", (err, res) => {
                         if (err) console.log(err)
@@ -54,8 +51,7 @@ module.exports = {
                         db.close()
                         res.redirect('/')
                     })
-                })
             })
         })
-    }
+    },
 }

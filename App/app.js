@@ -7,7 +7,6 @@ const path = require('path')
 const MongoClient = require("mongodb").MongoClient
 const multer = require('multer')
 const fs = require('fs')
-const bcrypt = require('bcrypt')
 
 global.saltRounds = 10
 
@@ -93,6 +92,7 @@ const {getHomePage, getViewFilePage, getViewEventPage, testViewAllEvents, viewEv
 const {inputFilePage, saveFileInProgress, newEventPage, submitNewEvent, fullSubmitFile, deleteEvent} = require('./routes/admin')
 const {eventsByDate, filesByEvent, checkEvent} = require("./routes/functions")
 const {login, saveTestAccount, redirectFromLogin, redirectHome, logout} = require("./routes/authentication.js")
+const {searchEvents} = require("./routes/search")
 
 //defines requests by url
 app.get('/', getHomePage)
@@ -116,6 +116,7 @@ app.get('/viewEvent/:id', getViewEventPage)
 app.get('/viewEvents', viewEventsPage)
 
 app.get('/testViewEvents', testViewAllEvents)
+app.get('/searchEvents', searchEvents)
 
 app.get('/login', redirectFromLogin, loginPage)
 app.post('/authenticate', redirectFromLogin, login)
@@ -152,7 +153,9 @@ const { nextTick } = require("process")
 
 
 //First time run on new server
-app.get('/setup', adminDbSetup)
+app.get('/setupDb', adminDbSetup)
+const {indexSetup} = require('./routes/indexSetup')
+indexSetup()
 
 app.listen(PORT, () => console.log("Server running on port " + PORT))
 
