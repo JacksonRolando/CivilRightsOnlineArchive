@@ -74,7 +74,7 @@ global.dbclient = new MongoClient(dburl, { useUnifiedTopology: true})
 
 
 //Import javascript files
-const {getHomePage, getViewFilePage, getViewEventPage, testViewAllEvents, viewEventsPage, loginPage} = require('./routes/index.js')
+const {getHomePage, getViewFilePage, getViewEventPage, testViewAllEvents, viewEventsPage, loginPage, viewAdminPanel} = require('./routes/index.js')
 const {inputFilePage, saveFileInProgress, newEventPage, submitNewEvent, fullSubmitFile, deleteEvent} = require('./routes/admin')
 const {eventsByDate, filesByEvent, checkEvent} = require("./routes/functions")
 const {login, saveTestAccount, redirectFromLogin, redirectHome, logout} = require("./routes/authentication.js")
@@ -110,6 +110,8 @@ app.get('/deleteEvent/:id', redirectHome, deleteEvent)
 app.get('/logout', logout)
 
 app.get('/setTestUser', saveTestAccount)
+
+app.get('/adminPanel', viewAdminPanel)
 
 
 

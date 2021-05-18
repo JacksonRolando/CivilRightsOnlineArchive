@@ -22,6 +22,7 @@
                 <li class="nav-item"><a class="nav-link disabled" onclick="window.location.replace('/inputFile')">Contribute</a></li>
                 <!--TODO:make the text & action of this button dynamic with login-->
                 <% if(isAdmin) { %>
+                    <li class="nav-item"><a class="nav-link" onclick="window.location.replace('/adminPanel')">Beans</a></li>
                     <li class="nav-item"><a class="nav-link" onclick="window.location.replace('/logout')">Logout</a></li>
                 <% } else { %>
                     <li class="nav-item"><a class="nav-link" onclick="window.location.replace('/login')">Login</a></li>
@@ -29,8 +30,11 @@
             </ul>
         </div>
     </nav>
-    <div class="jumbotron">
-        <div class="container"><h1>Hello, the world!</h1></div>
+    <div style="text-align: center; padding-top: 50px;">
+        <!--TODO: maybe use a data list here-->
+        <input type="text" id="searchBox" placeholder="Search...">
+        <button class="btn btn-primary" onclick="runSearch()" id="searchButton">Enter</button>
+        <div id="listOfResults"></div>
     </div>
 
 <!-- Javascript magic smoke -->

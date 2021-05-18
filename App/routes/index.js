@@ -14,6 +14,7 @@ module.exports = {
     },
 
     loginPage: (req, res) => {
+        //TODO: do we need to protect against someone manually going to login, even when they're logged in?
         res.render('login')
     },
 
@@ -101,5 +102,13 @@ module.exports = {
 
     viewEventsPage: (req, res) => {
         res.redirect('/testViewEvents')
+    },
+
+    viewAdminPanel: (req, res) => {
+        if(req.session.user.admin) {
+            res.render('adminPanel')
+        } else {
+            res.redirect('/');
+        }
     }
 }
